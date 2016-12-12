@@ -1,8 +1,5 @@
 module GraphPCA
 
-using Devectorize
-include("utils.jl")
-
 # package code goes here
 export GLPCA, reconstruct, reconstruction_error
 
