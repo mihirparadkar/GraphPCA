@@ -11,14 +11,15 @@ function getG(X::AbstractMatrix, β::Number, L::AbstractMatrix)
     throw(ArgumentError("β must be between 0 and 1"))
   end
   n = size(L,2)
-  XtX = Symmetric(X'*X)
-  L = Symmetric(L)
-  #eet = Symmetric(ones(n,n))
+  XtX = X'X
+  L = L
+  #eet = ones(n,n)
   @assert n == size(XtX,2)
   #Largest eigenvalue of XtX to normalize
-  λ = eigmax(XtX)
-  η = eigmax(L)
-  G = (1 - β)*(I - XtX/λ) + β*(L/η + eet/n)
+  λ = eigmax(Symmetric(XtX))
+  η = eigmax(Symmetric(L))
+  G = (1 - β)*(I - XtX/λ) + β*(L/η) #+ eet/n)
+  Symmetric(G)
 end
 
 type GLPCA
