@@ -1,5 +1,6 @@
 module GraphPCA
 
+using Devectorize
 include("utils.jl")
 
 # package code goes here
@@ -20,20 +21,7 @@ function getG(X::AbstractMatrix, β::Number, L::AbstractMatrix)
   #Largest eigenvalue of XtX to normalize
   λ = eigmax(XtX)
   η = eigmax(L)
-  #G = (1 - β)*(I - XtX/λ) + β*(L/η + eet/n)
-  G = XtX
-  mul!(G, 1/λ)
-  sub!(I, G)
-  mul!(G, 1 - β)
-
-  #Don't want to copy L
-  H = deepcopy(L)
-  mul!(H, 1/η)
-  #mul!(eet, 1/n)
-  #add!(H, eet)
-  mul!(H, β)
-  add!(G,H)
-  G
+  G = (1 - β)*(I - XtX/λ) + β*(L/η + eet/n)
 end
 
 type GLPCA
